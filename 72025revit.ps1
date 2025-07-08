@@ -14,3 +14,6 @@ $installerPath = "$env:TEMP\vc_redist.x64.exe"
 Invoke-WebRequest -Uri $latestVCURL -OutFile $installerPath
 
 Start-Process -FilePath $installerPath -ArgumentList "/install", "/quiet", "/norestart" -Wait
+
+
+Get-appxprovisionedpackage –online | where-object {$_.packagename –like “*Microsoft.Microsoft3DViewer*”} | Remove-AppxProvisionedPackage -online
