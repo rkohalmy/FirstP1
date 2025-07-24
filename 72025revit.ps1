@@ -9,6 +9,16 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstatio
 
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "RestrictAnonymous" -Value 1
 
+Get_ItemPropert -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters' -Name 'EnabledSecuritySignature'
+
+Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters' -Name 'RequireSecuritySignature'
+
+Get_ItemPropert -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters' -Name 'EnabledSecuritySignature'
+
+Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters' -Name 'RequireSecuritySignature'
+
+Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Lsa' -Name 'RestrictAnonymous'
+
 #Install 14.44 CPP Redis
 $latestVCURL = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
 $installerPath = "$env:TEMP\vc_redist.x64.exe"
@@ -20,5 +30,5 @@ Start-Process -FilePath $installerPath -ArgumentList "/install", "/quiet", "/nor
 # Birthday attack
 Disable-TlsCipherSuite -Name 'TLS_RSA_WITH_3DES_EDE_CBC_SHA'
 
-# 3D Viewer remover
-Get-appxprovisionedpackage –online | where-object {$_.packagename –like “*Microsoft.Microsoft3DViewer*”} | Remove-AppxProvisionedPackage -online
+# 3D Viewer remover (did not work, do not use)
+# Get-appxprovisionedpackage –online | where-object {$_.packagename –like “*Microsoft.Microsoft3DViewer*”} | Remove-AppxProvisionedPackage -online
