@@ -9,11 +9,11 @@ Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstatio
 
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "RestrictAnonymous" -Value 1
 
-Get_ItemPropert -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters' -Name 'EnabledSecuritySignature'
+Get_ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters' -Name 'EnabledSecuritySignature'
 
 Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters' -Name 'RequireSecuritySignature'
 
-Get_ItemPropert -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters' -Name 'EnabledSecuritySignature'
+Get_ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters' -Name 'EnabledSecuritySignature'
 
 Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters' -Name 'RequireSecuritySignature'
 
