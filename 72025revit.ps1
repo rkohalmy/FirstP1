@@ -1,34 +1,37 @@
-#SMB and Null Session correction
+# SMB Fix
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "EnableSecuritySignature" -Value 1
-
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "RequireSecuritySignature" -Value 1 
-
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" -Name "EnableSecuritySignature" -Value 1 
-
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters" -Name "RequireSecuritySignature" -Value 1 
 
+# Null Session Fix
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "RestrictAnonymous" -Value 1
 
-Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters' -Name 'EnabledSecuritySignature'
+# Check if creating/value setting worked
+Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters\EnabledSecuritySignature'
+Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters\RequireSecuritySignature'
+Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters\EnabledSecuritySignature'
+Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters\RequireSecuritySignature'
+Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\RestrictAnonymous'
+Get-ItemProperty -Path "HKLM\SYSTEM\CurrentControlSet\Services\HTTP\Parameters\EnableHttp2Tls"
+Get-ItemProperty -Path "HKLM\SYSTEM\CurrentControlSet\Services\HTTP\Parameters\EnableHttp2Cleartext"
 
-Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Paramaters' -Name 'RequireSecuritySignature'
+# Install CPP Redis
 
-Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters' -Name 'EnabledSecuritySignature'
-
-Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Paramaters' -Name 'RequireSecuritySignature'
-
-Get-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\Lsa' -Name 'RestrictAnonymous'
-
-#Install 14.44 CPP Redis
+# Variables for latest version download and temp dlownload location
 $latestVCURL = "https://aka.ms/vs/17/release/vc_redist.x64.exe"
 $installerPath = "$env:TEMP\vc_redist.x64.exe"
 
+# Download command
 Invoke-WebRequest -Uri $latestVCURL -OutFile $installerPath
 
+# Install command
 Start-Process -FilePath $installerPath -ArgumentList "/install", "/quiet", "/norestart" -Wait
 
-# Birthday attack
-Disable-TlsCipherSuite -Name 'TLS_RSA_WITH_3DES_EDE_CBC_SHA'
+# Remove all DotNet installs
+winget list "Microsoft .NET Desktop Runtime"
+winget uninstall "Microsoft .NET Desktop Runtime"
+# winget uninstall "Microsoft .NET Desktop Runtime 8"
 
-# 3D Viewer remover (did not work, do not use)
-# Get-appxprovisionedpackage –online | where-object {$_.packagename –like “*Microsoft.Microsoft3DViewer*”} | Remove-AppxProvisionedPackage -online
+# Install DotNet 9
+winget install Microsoft.DotNet.DesktopRuntime.9
